@@ -24,14 +24,10 @@
         "johnitvn/yii2-ajaxcrud": "*",
         "kartik-v/yii2-widget-datetimepicker": "dev-master",
         "kartik-v/yii2-widget-select2": "dev-master",
-<<<<<<< HEAD
-        "kartik-v/yii2-mpdf": "dev-master"
-=======
-<<<<<<< HEAD
+
         "kartik-v/yii2-mpdf": "dev-master"
 =======
         "kartik-v/yii2-number": "dev-master"
->>>>>>> f71f4af3179f7652f8196dcdca070430fefbebcd
 >>>>>>> ad026c6e7fefda73c088266fd3b25c22c6e96cfc
     },
     "require-dev": {
