@@ -65,9 +65,7 @@ class PembayaranAmbulanceController extends Controller
     public function actionReport($id) {
         // get your HTML raw content without any layouts or scripts
         $model = CetakPembayaran::findOne(['id_pemesanan_ambulance' =>$id]); 
-        var_dump($model);
-        die; 
-        $content = $this->render('_reportView', [
+        $content = $this->renderPartial('_reportView', [
             'model' => $model,
         ]);
 
@@ -97,18 +95,8 @@ class PembayaranAmbulanceController extends Controller
                     ]
                 ]);
 
-        $request = Yii::$app->request;
-        if ($request->isAjax) {
-            Yii::$app->response->format = Response::FORMAT_JSON;
-            return [
-                'title' => "Laporan Pembayaran Ambulance" . $id,
-                'content' => $pdf->renderAjax('laporan'),
-                'footer' => Html::button('Close', ['class' => 'btn btn-default pull-left', 'data-dismiss' => "modal"]) .
-                    Html::a('Edit', ['update', 'id' => $id], ['class' => 'btn btn-primary', 'role' => 'modal-remote'])
-            ];
-        } else {
-            return $pdf->render('laporan');
-        }
+            return $pdf->render();
+                    
     }
         
 
@@ -194,7 +182,7 @@ class PembayaranAmbulanceController extends Controller
             *   Process for non-ajax request
             */
             if ($model->load($request->post()) && $model->save()) {
-                return $this->redirect(['report', 'id' => $model->id]);
+                return $this->redirect(['report', 'id' => $model->id_pemesanan_ambulance]);
             } else {
                 return $this->render('create', [
                     'model' => $model,
