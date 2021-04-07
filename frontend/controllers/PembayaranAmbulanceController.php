@@ -46,9 +46,15 @@ class PembayaranAmbulanceController extends Controller
         $model = new PemesananAmbulance();
         if ($request->post()) {
             $pesanan = PemesananAmbulance::findOne(['nomor_pesanan' => $request->post()["PemesananAmbulance"]["nomor_pesanan"]]);
-            if ($pesanan)
+            $pembayaran = PembayaranAmbulance::find()->andFilterWhere(['id_pemesanan_ambulance' => $pesanan->id])->exists();
+            if ($pesanan && !$pembayaran)
                 return $this->redirect(['create', 'id_pesanan' => $pesanan->id]);
-            else {
+            else if ($pembayaran) {
+                Yii::$app->session->setFlash('error', 'Pesanan sudah dibayarkan');
+                return $this->render('index', [
+                    'model' => $model,
+                ]);
+            } else {
                 Yii::$app->session->setFlash('error', 'Pesanan tidak ditemukan');
                 return $this->render('index', [
                     'model' => $model,
