@@ -14,6 +14,7 @@ use yii\helpers\ArrayHelper;
 use common\models\MasterTarifAmbulance;
 use common\models\MasterNomorPolisiMobilAmbulance;
 use common\models\MasterSopirAmbulance;
+use kartik\mpdf\Pdf;
 
 /**
  * PemesananAmbulanceController implements the CRUD actions for PemesananAmbulance model.
@@ -294,5 +295,29 @@ class PemesananAmbulanceController extends Controller
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
         }
+    }
+
+    public function actionCetak($id)
+    {
+        $model = $this->findModel($id);
+        $dataCetak = PemesananAmbulance::findOne($id);
+        $content = $this->renderPartial('cetak',  [
+            'model' => $model,
+            'dataCetak' => $dataCetak,
+        ]);
+
+        $pdf = new Pdf([
+            'mode' => Pdf::MODE_CORE,
+            'format' => Pdf::FORMAT_A4,
+            'orientation' => Pdf::ORIENT_PORTRAIT,
+            'destination' => Pdf::DEST_BROWSER,
+            'content' => $content,
+            'options' => ['title' => 'Laporan Pemesanan'],
+            'methods' => [
+                'SetHeader' => ['Laporan Pemesanan'],
+                'SetFooter' => ['{PAGENO}'],
+            ]
+        ]);
+        return $pdf->render();
     }
 }

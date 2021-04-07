@@ -1,6 +1,7 @@
 <?php
 
 namespace common\models;
+
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
 
@@ -62,7 +63,7 @@ class PemesananAmbulance extends \yii\db\ActiveRecord
             [['id_daerah_tujuan', 'id_nomor_polisi_mobil_ambulance', 'id_sopir_ambulance'], 'integer'],
             [['alamat_pemesan'], 'string'],
             [['jarak_tambahan'], 'number'],
-            [['tanggal_pesanan' ,'nomor_pesanan'], 'safe'],
+            [['tanggal_pesanan', 'nomor_pesanan'], 'safe'],
             [['nama_pemesan'], 'string', 'max' => 255],
             [['nik_pemesan', 'nomor_hp_pemesan'], 'string', 'max' => 20],
             [['id_daerah_tujuan'], 'exist', 'skipOnError' => true, 'targetClass' => MasterTarifAmbulance::className(), 'targetAttribute' => ['id_daerah_tujuan' => 'id']],
