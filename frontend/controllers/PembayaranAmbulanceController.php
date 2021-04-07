@@ -49,6 +49,7 @@ class PembayaranAmbulanceController extends Controller
             if ($pesanan)
                 return $this->redirect(['create', 'id_pesanan' => $pesanan->id]);
             else {
+                Yii::$app->session->setFlash('error', 'Pesanan tidak ditemukan');
                 return $this->render('index', [
                     'model' => $model,
                 ]);
