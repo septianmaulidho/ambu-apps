@@ -74,4 +74,9 @@ function searchLocation() {
         $('#form-address-location').attr('hidden', false);
         $('#pemesananambulance-jarak_tambahan').val(parseFloat(data.route.distance).toFixed(2));
     });
+
+    dir.on('error', function (e)){
+        console.log('Not Found!');
+        alert("Tidak ada data ditemukan");
+    }
 }
