@@ -1,5 +1,4 @@
-
-<br><h4> Bukti Pembayaran</h4><br>
+<br><h4>Bukti Pembayaran</h4> </center><br>
 <table>
         <tr>
         <td> Nomor Pesanan : </td>

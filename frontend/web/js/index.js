@@ -51,6 +51,11 @@ function searchLocationTarif() {
         $('#mastertarifambulance-perkiraan_jarak_tempuh').val(parseFloat(data.route.distance).toFixed(2));
         $('#mastertarifambulance-tarif').val(Math.floor(parseFloat(data.route.distance) * 10) * 1000);
     });
+
+    dir.on('error', function (e){
+        console.log('Not Found!');
+        alert("Tidak ada data ditemukan");
+    })
 }
 
 function searchLocation() {
@@ -74,4 +79,9 @@ function searchLocation() {
         $('#form-address-location').attr('hidden', false);
         $('#pemesananambulance-jarak_tambahan').val(parseFloat(data.route.distance).toFixed(2));
     });
+
+    dir.on('error', function (e){
+        console.log('Not Found!');
+        alert("Tidak ada data ditemukan");
+    })
 }
