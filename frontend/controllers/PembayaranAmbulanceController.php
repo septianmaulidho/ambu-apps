@@ -6,12 +6,14 @@ use common\models\MasterTarifAmbulance;
 use Yii;
 use common\models\PembayaranAmbulance;
 use common\models\PemesananAmbulance;
+use common\models\CetakPembayaran;
 use frontend\models\PembayaranAmbulanceSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use \yii\web\Response;
 use yii\helpers\Html;
+use kartik\mpdf\Pdf;
 
 /**
  * PembayaranAmbulanceController implements the CRUD actions for PembayaranAmbulance model.
@@ -46,9 +48,16 @@ class PembayaranAmbulanceController extends Controller
         $model = new PemesananAmbulance();
         if ($request->post()) {
             $pesanan = PemesananAmbulance::findOne(['nomor_pesanan' => $request->post()["PemesananAmbulance"]["nomor_pesanan"]]);
-            if ($pesanan)
+            $pembayaran = PembayaranAmbulance::find()->andFilterWhere(['id_pemesanan_ambulance' => $pesanan->id])->exists();
+            if ($pesanan && !$pembayaran)
                 return $this->redirect(['create', 'id_pesanan' => $pesanan->id]);
-            else {
+            else if ($pembayaran) {
+                Yii::$app->session->setFlash('error', 'Pesanan sudah dibayarkan');
+                return $this->render('index', [
+                    'model' => $model,
+                ]);
+            } else {
+                Yii::$app->session->setFlash('error', 'Pesanan tidak ditemukan');
                 return $this->render('index', [
                     'model' => $model,
                 ]);
@@ -60,6 +69,43 @@ class PembayaranAmbulanceController extends Controller
         }
     }
 
+    public function actionReport($id) {
+        // get your HTML raw content without any layouts or scripts
+        $model = CetakPembayaran::findOne(['id_pemesanan_ambulance' =>$id]); 
+        $content = $this->renderPartial('_reportView', [
+            'model' => $model,
+        ]);
+
+                // setup kartik\mpdf\Pdf component
+                $pdf = new Pdf([
+                    // set to use core fonts only
+                    'mode' => Pdf::MODE_CORE, 
+                    // A4 paper format
+                    'format' => Pdf::FORMAT_A4, 
+                    // portrait orientation
+                    'orientation' => Pdf::ORIENT_PORTRAIT, 
+                    // stream to browser inline
+                    'destination' => Pdf::DEST_BROWSER, 
+                    // your html content input
+                    'content' => $content,  
+                    // format content from your own css file if needed or use the
+                    // enhanced bootstrap css built by Krajee for mPDF formatting 
+                    // 'cssFile' => '@vendor/kartik-v/yii2-mpdf/assets/kv-mpdf-bootstrap.min.css',
+                    // any css to be embedded if required
+                    'cssInline' => '.kv-heading-1{font-size:18px}', 
+                     // set mPDF properties on the fly
+                    'options' => ['title' => 'Laporan'],
+                     // call mPDF methods on the fly
+                    'methods' => [ 
+                        'SetHeader'=>['Laporan Pembayaran'], 
+                        'SetFooter'=>['{PAGENO}'],
+                    ]
+                ]);
+
+            return $pdf->render();
+                    
+    }
+        
 
     /**
      * Displays a single PembayaranAmbulance model.
@@ -143,7 +189,7 @@ class PembayaranAmbulanceController extends Controller
             *   Process for non-ajax request
             */
             if ($model->load($request->post()) && $model->save()) {
-                return $this->redirect(['view', 'id' => $model->id]);
+                return $this->redirect(['report', 'id' => $model->id_pemesanan_ambulance]);
             } else {
                 return $this->render('create', [
                     'model' => $model,
