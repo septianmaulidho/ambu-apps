@@ -24,11 +24,8 @@
         "johnitvn/yii2-ajaxcrud": "*",
         "kartik-v/yii2-widget-datetimepicker": "dev-master",
         "kartik-v/yii2-widget-select2": "dev-master",
-
+        "kartik-v/yii2-number": "dev-master",
         "kartik-v/yii2-mpdf": "dev-master"
-=======
-        "kartik-v/yii2-number": "dev-master"
->>>>>>> ad026c6e7fefda73c088266fd3b25c22c6e96cfc
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.1.0",
