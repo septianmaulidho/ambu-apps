@@ -3,6 +3,7 @@
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use yii\widgets\DetailView;
+use kartik\number\NumberControl;
 
 /* @var $this yii\web\View */
 /* @var $model common\models\PembayaranAmbulance */
@@ -40,9 +41,20 @@ use yii\widgets\DetailView;
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($model, 'tarif_jarak_tambahan')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'tarif_jarak_tambahan')->textInput(['readonly' => true, 'maxlength' => true]) ?>
 
-    <?= $form->field($model, 'total_tarif')->textInput(['maxlength' => true]) ?>
+    <?php // $form->field($model, 'total_tarif')->textInput(['maxlength' => true]) 
+    ?>
+
+    <?= $form->field($model, 'total_tarif')->widget(NumberControl::classname(), [
+        'maskedInputOptions' => [
+            'prefix' => 'Rp. ',
+            'allowMinus' => false,
+            'groupSeparator' => '.',
+            'rightAlign' => false,
+
+        ],
+    ]); ?>
 
     <?php if (!Yii::$app->request->isAjax) { ?>
         <div class="form-group">
